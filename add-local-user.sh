@@ -20,7 +20,7 @@ echo "Username is: ${USER}"
 echo "Password is: xxxxxxx"
 
 #Creates a new user on the local system with the input provided by the user.
-useradd -m -c "${COMMENT}"
+useradd -m -c "${COMMENT}" "${USER}"
 
 #Informs the user if the username was not able to be created for some reason.
 #If the user is not created, the script is to return an exit status of 1 with error message.
@@ -37,14 +37,19 @@ echo "${USER}:${PASSWORD}" | chpasswd
 # If the password is not created, the script is to return an exit status of 1 with error message.
 if [[ "${?}" -ne 0 ]]
 then
-  echo "Error: Adding Password"
+  echo "Error: Could not create or add password"
   exit 1
 fi
+
+#Force password change on first login.
+password -e "${USER}"
+
+#Return message of user that was successful added and the HOSTNAME
+
+#Displays the username, password, and host where the account was created.  This way the help desk staff can copy the
+#output of the script in order to easily deliver the information to the new account holder.
 
 exit 0
 
 
-
-#Displays the username, password, and host where the account was created.  This way the help desk staff can copy the
-#output of the script in order to easily deliver the information to the new account holder.
 
