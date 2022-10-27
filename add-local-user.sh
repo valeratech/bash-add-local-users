@@ -14,9 +14,16 @@ fi
 #Prompts the person who executed the script to enter the username (login), the name for person who will be using the
 #account, and the initial password for the account.
 
+read -p "Username: " USER
+read -p "Full Name or Description: " COMMENT
+read -p "Password: " PASSWORD
 
+echo "Username is: ${USER}"
+echo "Password is: xxxxxxx"
 
 #Creates a new user on the local system with the input provided by the user.
+
+
 
 #Informs the user if the account was not able to be created for some reason.  If the account is not created, the script
 #is to return an exit status of 1.
