@@ -1,11 +1,21 @@
 #!/bin/bash
 
-#Create a log function to log to syslog/journald upon account creation success or failure
+#Create a usage function to display when script is passed with 0 arguments
 usage()
 {
   echo "USAGE: ${0} [USERNAME] [COMMENT]"
   echo "EXAMPLE:  ${0} Optimus 'Optimus Prime'"
+  echo "NOTE: Use quotes for comments"
   exit 1
+}
+
+#Create a log function to log to syslog/journald upon account creation success or failure
+log()
+{
+  #The options FN create a timestamp with full date/time with nanoseconds
+  TIMESTAMP=$(date +%F%N)
+  #Option -t will create a tag field with the following string on every line
+  logger -t Account_Creation "account: '${USER}' created: ${TIMESTAMP}"
 }
 
 #Enforces that it be executed with superuser (root) privileges.  If the script is not executed with superuser privileges
@@ -15,7 +25,7 @@ then
   echo "Not admin. Please log in with root privileges"
   exit 1
 else
-  echo "Welcome Admin"
+  echo "WELCOME ADMIN"
 fi
 
 #If no arguments pass display a "usage" message
@@ -29,7 +39,6 @@ fi
 # And a Full name or description for the comments
 USER="${1}"
 COMMENT="${2}"
-
 
 #Randomly generate a password using /dev/urandom
 #Remove specific characters using the -d option and the -c option to complement the characters in SET1.
@@ -48,6 +57,7 @@ then
   exit 1
 fi
 
+
 #Create a password for the user from the input provided (Ubuntu)
 echo "${USER}:${PASSWORD}" | chpasswd
 
@@ -59,15 +69,17 @@ then
   exit 1
 fi
 
+
 #Force password change on first login.
 passwd -e "${USER}"
-echo "${PASSWORD}"
-echo "${0}"
+echo "Username: ${USER}"
+echo "Password: ${PASSWORD}"
+
 #Return message of user that was successful added and the HOSTNAME
 
 #Displays the username, password, and host where the account was created.  This way the help desk staff can copy the
 #output of the script in order to easily deliver the information to the new account holder.
-
+log
 exit 0
 
 
